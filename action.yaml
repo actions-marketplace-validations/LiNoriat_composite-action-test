@@ -50,13 +50,13 @@ runs:
     - name: Login to ACR
       uses: docker/login-action@v2
       with:
-        registry: ${{ inputs.CONTAINER_REGISTRY }}
-        username: ${{ inputs.DOCKER_LOGIN }}
-        password: ${{ inputs.DOCKER_PASS }}
+        registry: ${{ inputs.container_registry }}
+        username: ${{ inputs.docker_login }}
+        password: ${{ inputs.docker_pass }}
 
     - name: Check if image exist
       run: |
-          inspect_result=$(docker manifest inspect "${{ secrets.CONTAINER_REGISTRY }}/${{ matrix.project.image_name }}" > /dev/null 2>&1; echo $?)
+          inspect_result=$(docker manifest inspect "${{ inputs.container_registry }}/${{ matrix.project.image_name }}" > /dev/null 2>&1; echo $?)
           if [ $inspect_result -eq 1 ] 
           then 
             echo "IMAGE_EXIST=false" >> $GITHUB_ENV 
@@ -82,11 +82,11 @@ runs:
           build-args: |
             build_number=${{ matrix.project.build_number }}
             ENVIROMENT=${{ inputs.is_stage && 'stage' || 'production'  }}
-            GITHUB_TOKEN=${{ secrets.GH_TOKEN }}
+            GITHUB_TOKEN=${{ inputs.gh_token }}
             GITHUB_USERNAME=sravni
-            GITHUB_NPM_TOKEN=${{ secrets.GH_TOKEN }}
+            GITHUB_NPM_TOKEN=${{ inputs.gh_token }}
           push: ${{ inputs.with_push }}
-          tags: "${{ secrets.CONTAINER_REGISTRY }}/${{ matrix.project.image_name }}"
+          tags: "${{ inputs.container_registry }}/${{ matrix.project.image_name }}"
 
     - run: goodbye.sh
       shell: bash
