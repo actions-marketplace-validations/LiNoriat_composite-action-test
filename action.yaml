@@ -1,5 +1,5 @@
-name: 'try build and test'
-description: 'composite action test'
+name: try build and test
+description: composite action test
 inputs:
   is_stage:
     description: "Запускается ли план для публикации на стейдж"
@@ -12,7 +12,6 @@ inputs:
     required: true
   runner:
     description: "Указывает какой раннер будет использоваться для запуска флоу"
-    default: "sravni_ycloud_stage"
     required: false
   image_version:
     description: "Версия образа"
@@ -87,6 +86,3 @@ runs:
             GITHUB_NPM_TOKEN=${{ inputs.gh_token }}
           push: ${{ inputs.with_push }}
           tags: "${{ inputs.container_registry }}/${{ matrix.project.image_name }}"
-
-    - run: goodbye.sh
-      shell: bash
